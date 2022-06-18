@@ -1,20 +1,13 @@
 # peakfinding and filtering schemes
 
 import pdb
-
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-
 from scipy import optimize
-
 from improc.segfunctions import gaussian3d, get_bounded_chunks, medFilter2d, findpeaks3d_26nn, template_filter
-
-from wbu_data.tiffreader import TiffReader
-from wbu_data.datachunk import DataChunk
-#from wbu_blob.segmentedblob import SegmentedBlob
+from .data.datachunk import DataChunk
 from .blob import SegmentedBlob
-#from wbu_viz.vizutil import tile_images
 
 def tile_images(images=None, numcol=14):
     """tile a list of 2D images"""

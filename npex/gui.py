@@ -539,20 +539,18 @@ class NPEXCurator(object):
         self.histos = []
         for i, lay in enumerate(self.layers):
             if lay['chunk'].dim_len.get('C', 0) >= 3:
-                isrgb = True
-                lm = 'rgba'
+                levelMode = 'rgba'
                 data = self.mips[i]['IJ'].reorder_dims([self.view_ax['i'],self.view_ax['j'],'C']).data
             else:
-                isrgb = False
-                lm = 'mono'
+                levelMode = 'mono'
                 data = self.mips[i]['IJ'].data
             im = pg.ImageItem(data)
-            hi = pg.HistogramLUTItem(image=im, rgbHistogram=isrgb)
+            hi = pg.HistogramLUTItem(image=im, levelMode=levelMode)
             self.dum_ims.append(im)
             self.histos.append(hi)
-            self.histos[-1].setLevelMode(lm)
+            self.histos[-1].setLevelMode(levelMode)
 
-            if not isrgb:
+            if levelMode == 'mono':
                 # fixes annoying overflow warning
                 self.histos[-1].setLevels(min=float(np.min(data.ravel())), max=float(np.max(data.ravel())))
 
