@@ -158,12 +158,7 @@ class NPExtractor():
 
     def export(self):
         """serialize the object"""
-        ## tiffreader
-        #out = os.path.join(self.output_folder, 'tiffreader.json')
-        #self.tr.to_json(out)
         os.makedirs(self.output_folder, exist_ok=True)
-
-        # parameters
         dd = dict(
             f=os.path.abspath(self.f),
             peakfinding_parameters=self.peakfinding_parameters,
@@ -171,14 +166,11 @@ class NPExtractor():
             data_tag=self.data_tag,
             pixel_size=self.pixel_size
         )
-        #out = os.path.join(self.output_folder, 'npextractor.json')
         out = self.json_export_file
         with open(out, 'w') as f:
             json.dump(dd, f, indent=2)
             f.write('\n')
-
         print('exported: ', out)
-
 
     @classmethod
     def load(cls, jf, f=None):
@@ -256,6 +248,7 @@ class NPExtractor():
         l3 = dict(name='template filtered', chunk=res2['filtered_chunk'].subchunk(req=crop_request).squeeze())
         self._extra_gui_layers = [l2, l3]
 
+        self.export()
 
     def extract_rgbw(self, view_napari=False, output_folder=None):
         """
