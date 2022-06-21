@@ -80,8 +80,6 @@ class NPExtractor():
             4-vector of RGBW channel order
         data_tag: str
             Unique ID for this dataset. Recommended YYYY-MM-DD_wormWW_actAA_extra_stuff_but_not_too_much
-        np_ix: int
-            Dataset index (0, 1, 2, ..) for the special case of npgc acquisitions with more than one neuropal volume
         pixel_size: dict
             e.g. {'X':0.12, 'Y':0.12, 'Z':0.75, } sizes in microns
 
@@ -104,27 +102,7 @@ class NPExtractor():
         self.f = f
         filename = os.path.basename(f)
         if filename == 'info.json':
-            # TODO make alt constructor from_infojson()
-            # info.json file is packed with extra metadata treats :)
-            np_ix = kwargs.get('np_ix', 0)
-            def maketag(d):
-                """make a unique tag for this dataset"""
-                return '%s-w%2.2i-a%s' % (d['date'], int(d['worm']), d['act'])
-            try:
-                # from .util import load_npgc_data
-                data = load_npgc_data(f)
-                self.tr = data['neuropal']['tiffreaders'][np_ix]
-                self.rgbw_channels = data['neuropal']['rgbw']
-                self.data_tag = maketag(data)
-            except:
-                print('loading npe without raw data (most likely from json)')
-                self.tr = None
-                self.rgbw_channels = kwargs['rgbw_channels']
-                self.data_tag = kwargs.get('data_tag', 'default_data_tag')
-            if output_folder_base:
-                # special case, we need to choose among >1 NP volumes (NP1/NP2/NP3 etc.)
-                output_folder = os.path.join(output_folder_base, 'anl-%s/NP%i' % (self.data_tag, np_ix+1))
-                output_folder_base = False
+            raise Exception('cannot load from info.json anymore')
         elif filename == 'tiffreader.json':
             # tiffreader.json
             self.tr = TiffReader.from_json(f)
@@ -462,12 +440,9 @@ class NPExtractor():
         self.df_peaks_curated = blobs_curated
 
 
-
-
-
 def rescale_channel(x, rms_scale=5):
     """approximate histogram equalization
-    
+
     rescale so the RMS=rms_scale and then (natural) log scale values >1
     """
     x_rms = np.sqrt(np.mean(x**2))

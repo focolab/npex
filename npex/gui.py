@@ -545,7 +545,8 @@ class NPEXCurator(object):
                 levelMode = 'mono'
                 data = self.mips[i]['IJ'].data
             im = pg.ImageItem(data)
-            hi = pg.HistogramLUTItem(image=im, levelMode=levelMode)
+            hi = pg.HistogramLUTItem(image=im)
+            hi.setLevelMode(levelMode)
             self.dum_ims.append(im)
             self.histos.append(hi)
             self.histos[-1].setLevelMode(levelMode)
