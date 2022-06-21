@@ -625,15 +625,10 @@ class NPEXCurator(object):
         f = np.array([[0,1,2], [0,1,3], [1,2,3], [0,2,3]])
         c = np.array([[1,0,0,1], [0,1,0,1], [0,0,1,1], [1,1,1,1]])
 
-        if not self.windows_mode:
-            tet = gl.GLMeshItem(vertexes=v, faces=f, faceColors=c,
-                         drawEdges=True, edgeColor=(0, 0, 0, 1))
-            scat = gl.GLScatterPlotItem(pos=v)
-            self.v3D = gl.GLViewWidget()
-            self.v3D.addItem(scat)
-            self.v3D.setFocusPolicy(QtCore.Qt.NoFocus)
-            self.bott.addWidget(self.v3D)
-            self.v3D.setMinimumSize(200, 200)
+        self.v3D = gl.GLViewWidget()
+        self.v3D.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.bott.addWidget(self.v3D)
+        self.v3D.setMinimumSize(200, 200)
         
         #---------------------------
         # zoom MIP box
@@ -669,9 +664,7 @@ class NPEXCurator(object):
 
         self.p7.sizeHint = lambda: pg.QtCore.QSize(350, 350)
 
-        if not self.windows_mode:
-            #self.v3D.sizeHint = lambda: pg.QtCore.QSize(350, 350)
-            self.v3D.setSizePolicy(self.p7.sizePolicy())
+        self.v3D.setSizePolicy(self.p7.sizePolicy())
 
 
         stretch = self.axlen[self.view_ax['k']]/self.axlen[self.view_ax['i']]
@@ -1340,9 +1333,6 @@ class NPEXCurator(object):
         times = []
         alpha = 3
 
-        if self.windows_mode:
-            return
-
         times.append(time.time())
 
         self.v3D.clear()
@@ -1359,7 +1349,6 @@ class NPEXCurator(object):
         p = np.array(list(pad3d.values()))+0.5
         c = np.array([200,0,0,1])
         s = np.array([6])
-        self.ctr3d = gl.GLScatterPlotItem(pos=p, color=c, size=s)
 
         times.append(time.time())
 
@@ -1410,9 +1399,6 @@ class NPEXCurator(object):
             elif ch3d.dim_len['C'] == 3:
                 pass
 
-        times.append(time.time())
-
-        self.v3D.addItem(self.ctr3d)
         times.append(time.time())
 
         # print('timing')
