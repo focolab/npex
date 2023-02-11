@@ -417,7 +417,8 @@ class NPExtractor():
                     pos=[row['X'], row['Y'], row['Z']],
                     dims=['X', 'Y', 'Z'],
                     pad=self.peakfinding_parameters['pad'],
-                    prov='detected'
+                    prov='detected',
+                    ID=row['ID']
                     )
                 blobs.append(sb)
 
