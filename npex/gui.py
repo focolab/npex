@@ -17,7 +17,7 @@ import random
 import string
 import time
 
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtGui, QtCore, QtWidgets
 import pyqtgraph.opengl as gl
 import pyqtgraph as pg
 import pyqtgraph.console
@@ -66,7 +66,7 @@ def getRGBA(rgbw, levels):
 
     return out, new_levels
 
-class KeyPressWindow(pg.GraphicsWindow):
+class KeyPressWindow(pg.GraphicsLayoutWidget):
     """a graphics window that registers keyPressEvent
     
     sauce: https://stackoverflow.com/a/49049204/6474403
@@ -191,8 +191,9 @@ class NPEXCurator(object):
         # the app and head widget
         self.app = QtCore.QCoreApplication.instance()
         if self.app is None:
-            self.app = QtGui.QApplication(sys.argv)
-        self.kpw = KeyPressWindow(title='npex curator')
+            self.app = pg.mkQApp()
+        # self.kpw = KeyPressWindow(title='npex curator')
+        self.kpw = KeyPressWindow()
 
         # setup the plots
         self.make_button_styles()
@@ -463,16 +464,16 @@ class NPEXCurator(object):
         # to update things that do not exit (throwing errors)
         self.is_setup = True
 
-        self.main_layout = QtGui.QVBoxLayout()
+        self.main_layout = QtWidgets.QVBoxLayout()
         self.kpw.setLayout(self.main_layout)
 
         self.topp = pg.GraphicsLayoutWidget()
         self.topp.scene().sigMouseClicked.connect(lambda x: self.mouse_clicked(x, click_type='general'))
         self.main_layout.addWidget(self.topp)
 
-        self.bottW = QtGui.QWidget()
+        self.bottW = QtWidgets.QWidget()
         self.main_layout.addWidget(self.bottW)
-        self.bott = QtGui.QHBoxLayout()
+        self.bott = QtWidgets.QHBoxLayout()
         self.bottW.setLayout(self.bott)
         self.bottW.setFixedHeight(350)
 
@@ -569,8 +570,8 @@ class NPEXCurator(object):
         # Wide button prevents the sliders above from resizing everything else
         # Fix to make the button edges truly round (below):
         # https://falsinsoft.blogspot.com/2015/11/qt-snippet-rounded-corners-qpushbutton.html
-        self.proxyX = QtGui.QGraphicsProxyWidget()
-        self.buttonX = QtGui.QPushButton('face tune')
+        self.proxyX = QtWidgets.QGraphicsProxyWidget()
+        self.buttonX = QtWidgets.QPushButton('face tune')
         self.buttonX.setStyleSheet(self.bstyle2)
         self.buttonX.setFixedWidth(150)
         self.buttonX.setAttribute(QtCore.Qt.WA_TranslucentBackground, True)     # WOOO!
@@ -680,7 +681,7 @@ class NPEXCurator(object):
         self.tw.setData(self.get_table())
         # TODO make it look less bright and obnoxious
         # self.tw.setStyleSheet("alternate-background-color: yellow; border-radius: 25px; border-width: 2px;")
-        self.tw.setSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.MinimumExpanding)
+        self.tw.setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.MinimumExpanding)
         self.tw.setMinimumWidth(350)
         self.bott.addWidget(self.tw)
 
@@ -688,15 +689,15 @@ class NPEXCurator(object):
         #### BUTTON BANK (lower right)
         def add_button(txt='text', fn=None, style=''):
             """helper for adding a button"""
-            button = QtGui.QPushButton(txt)
+            button = QtWidgets.QPushButton(txt)
             button.clicked.connect(fn)
             button.setStyleSheet(style)
             button.setFocusPolicy(QtCore.Qt.NoFocus)
             return button
         # widget/layout setup
-        self.button_bank_LR = QtGui.QWidget()
+        self.button_bank_LR = QtWidgets.QWidget()
         self.bott.addWidget(self.button_bank_LR)
-        self.bbLR_layout = QtGui.QGridLayout()
+        self.bbLR_layout = QtWidgets.QGridLayout()
         self.button_bank_LR.setLayout(self.bbLR_layout)
         # button styles (experimental)
 
@@ -715,7 +716,7 @@ class NPEXCurator(object):
         self.bbLR_layout.addWidget(self.buttonL2, 1, 0)
         self.bbLR_layout.addWidget(self.buttonL3, 2, 0)
         self.bbLR_layout.addWidget(self.buttonL4, 3, 0)
-        self.bbLR_layout.addItem(QtGui.QSpacerItem(25, 25), 4, 0) #, 1, -1)
+        self.bbLR_layout.addItem(QtWidgets.QSpacerItem(25, 25), 4, 0) #, 1, -1)
         self.bbLR_layout.addWidget(self.buttonL5, 5, 0)
         self.bbLR_layout.addWidget(self.buttonL6, 6, 0)
         self.bbLR_layout.addWidget(self.buttonL7, 7, 0)
@@ -724,7 +725,7 @@ class NPEXCurator(object):
         # middle column
         self.buttonM1 = add_button(txt='add blob to list', fn=self.add_blob, style=bstyle)
         self.buttonM2 = add_button(txt='cycle blob status', fn=self.cycle_blob_status, style=bstyle)
-        self.buttonM3 = QtGui.QLineEdit(placeholderText='cell ID')
+        self.buttonM3 = QtWidgets.QLineEdit(placeholderText='cell ID')
         #self.buttonM3.editingFinished.connect(self.update_ID)
         self.buttonM3.returnPressed.connect(self.update_blob_ID)
         #self.buttonM3.setStyleSheet('border-radius: 3px;')
@@ -743,7 +744,7 @@ class NPEXCurator(object):
         self.buttonR3 = add_button(txt='to napari', fn=self.to_napari, style=bstyle)
         self.buttonR6 = add_button(txt='import blobs', fn=self._import, style=bstyle)
         self.buttonR7 = add_button(txt='export blobs', fn=self.export, style=bstyle)
-        self.buttonR8 = QtGui.QLineEdit(placeholderText='user ID')
+        self.buttonR8 = QtWidgets.QLineEdit(placeholderText='user ID')
         self.buttonR8.returnPressed.connect(self.update_user_ID)
         self.bbLR_layout.addWidget(self.buttonR1, 0, 2)
         self.bbLR_layout.addWidget(self.buttonR2, 1, 2)
@@ -756,7 +757,7 @@ class NPEXCurator(object):
         self.bbLR_layout.setColumnMinimumWidth(0, 125)
         self.bbLR_layout.setColumnMinimumWidth(1, 125)
         self.bbLR_layout.setColumnMinimumWidth(2, 125)
-        self.button_bank_LR.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.MinimumExpanding)
+        self.button_bank_LR.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.MinimumExpanding)
         self.bbLR_layout.setAlignment(QtCore.Qt.AlignTop)
         self.bbLR_layout.setHorizontalSpacing(15)
 
@@ -773,7 +774,7 @@ class NPEXCurator(object):
         1. json file: list of serialized SegmentedBlob s
         2. json file: dict D, with D['blobs'] a list of serialized SegmentedBlob s
         """
-        name = QtGui.QFileDialog.getOpenFileName(self.kpw, 'Open File', self.dest)
+        name = QtWidgets.QFileDialog.getOpenFileName(self.kpw, 'Open File', self.dest)
 
         with open(name[0]) as jfopen:
             data = json.load(jfopen)
@@ -1732,6 +1733,7 @@ class NPEXCurator(object):
         #timer.timeout.connect(self.update_plots)
         #timer.start(50)
         if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):
+            self.kpw.show()
             self.app.exec_()
 
         #print('TODO: make this return something (all saved blob files? the latest blob file?)')

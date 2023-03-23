@@ -105,9 +105,9 @@ class SegmentedBlob(object):
         if rounding == None:
             pos_int = self.pos
         elif rounding == 'floor':
-            pos_int = np.floor(self.pos).astype(np.int)
+            pos_int = np.floor(self.pos).astype(int)
         elif rounding == 'nearest':
-            pos_int = np.rint(self.pos).astype(np.int)
+            pos_int = np.rint(self.pos).astype(int)
             #raise NotImplementedError('rounding (%s) not YET implemented', 'closest')
         else:
             raise NotImplementedError('rounding (%s) not implemented', rounding)
