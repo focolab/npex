@@ -138,14 +138,14 @@ class NPExtractor():
         # load curated/blobs.csv
         blcsv = os.path.join(self.output_folder, 'curation', 'blobs.csv')
         if os.path.isfile(blcsv):
-            self.df_peaks_curated = pd.read_csv(blcsv, index_col=0)
+            self.df_peaks_curated = pd.read_csv(blcsv, index_col=0, keep_default_na=False)
         else:
             self.df_peaks_curated = None
 
         # load detected peaks
         blcsv = os.path.join(self.output_folder, 'df_peaks_detected.csv')
         if os.path.isfile(blcsv):
-            self.df_peaks_detected = pd.read_csv(blcsv, index_col=0)
+            self.df_peaks_detected = pd.read_csv(blcsv, index_col=0, keep_default_na=False)
         else:
             self.df_peaks_detected = None
 
