@@ -27,7 +27,7 @@ import numpy as np
 import pandas as pd
 import napari
 
-from .data.tiffreader import TiffReader
+from .tiffreader import TiffReader
 from .blob import SegmentedBlob
 
 def getRGBA(rgbw, levels):

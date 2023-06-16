@@ -17,7 +17,7 @@ from .alignment import scale_blob_coords
 from .alignment import align_data_to_reference
 from .gui import NPEXCurator
 from .blob import SegmentedBlob
-from .data.tiffreader import TiffReader
+from .tiffreader import TiffReader
 
 # def compressed_pickle(title, data):
 #     """

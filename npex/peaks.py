@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy import optimize
 from improc.segfunctions import gaussian3d, get_bounded_chunks, medFilter2d, findpeaks3d_26nn, template_filter
-from .data.datachunk import DataChunk
+from .datachunk import DataChunk
 from .blob import SegmentedBlob
 
 def tile_images(images=None, numcol=14):
