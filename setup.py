@@ -18,7 +18,7 @@ if platform.system() == 'Darwin':
             'pyqtgraph>=0.12.4',
             'pyqt6',
             'napari[pyqt6_experimental]',
-            'improc @ git+https://github.com/focolab/image-processing',
+            'foco-improc',
             'xmltodict'
         ],
         python_requires='<3.11',
@@ -42,7 +42,7 @@ else:
             'pyqtgraph>=0.12.4',
             'pyqt5',
             'napari>=0.4.16',
-            'improc @ git+https://github.com/focolab/image-processing',
+            'foco-improc',
             'xmltodict'
         ],
         python_requires='>=3.8',
