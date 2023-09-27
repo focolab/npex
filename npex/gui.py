@@ -574,10 +574,10 @@ class NPEXCurator(object):
         self.buttonX = QtWidgets.QPushButton('face tune')
         self.buttonX.setStyleSheet(self.bstyle2)
         self.buttonX.setFixedWidth(150)
-        self.buttonX.setAttribute(QtCore.Qt.WA_TranslucentBackground, True)     # WOOO!
+        self.buttonX.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground, True)     # WOOO!
         self.buttonX.clicked.connect(self.auto_levels)
         self.proxyX.setWidget(self.buttonX)
-        self.proxyX.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.proxyX.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.vb4 = self.topp.addItem(self.proxyX, row=1, col=4, rowspan=1, colspan=1)
 
         # formatting, linking X-axes together
@@ -627,7 +627,7 @@ class NPEXCurator(object):
         c = np.array([[1,0,0,1], [0,1,0,1], [0,0,1,1], [1,1,1,1]])
 
         self.v3D = gl.GLViewWidget()
-        self.v3D.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.v3D.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.bott.addWidget(self.v3D)
         self.v3D.setMinimumSize(200, 200)
         
@@ -681,7 +681,7 @@ class NPEXCurator(object):
         self.tw.setData(self.get_table())
         # TODO make it look less bright and obnoxious
         # self.tw.setStyleSheet("alternate-background-color: yellow; border-radius: 25px; border-width: 2px;")
-        self.tw.setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.MinimumExpanding)
+        self.tw.setSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.MinimumExpanding)
         self.tw.setMinimumWidth(350)
         self.bott.addWidget(self.tw)
 
@@ -692,7 +692,7 @@ class NPEXCurator(object):
             button = QtWidgets.QPushButton(txt)
             button.clicked.connect(fn)
             button.setStyleSheet(style)
-            button.setFocusPolicy(QtCore.Qt.NoFocus)
+            button.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
             return button
         # widget/layout setup
         self.button_bank_LR = QtWidgets.QWidget()
@@ -757,8 +757,8 @@ class NPEXCurator(object):
         self.bbLR_layout.setColumnMinimumWidth(0, 125)
         self.bbLR_layout.setColumnMinimumWidth(1, 125)
         self.bbLR_layout.setColumnMinimumWidth(2, 125)
-        self.button_bank_LR.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.MinimumExpanding)
-        self.bbLR_layout.setAlignment(QtCore.Qt.AlignTop)
+        self.button_bank_LR.setSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.MinimumExpanding)
+        self.bbLR_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
         self.bbLR_layout.setHorizontalSpacing(15)
 
         #### final layout tuning
@@ -1645,7 +1645,7 @@ class NPEXCurator(object):
         """key press events are directed here"""
         ### uncomment this to find out a key's int code
         # print("Key %i pressed" % event.key())
-        # if event.modifiers() == QtCore.Qt.ShiftModifier:
+        # if event.modifiers() == QtCore.Qt.KeyboardModifier.ShiftModifier:
         #     print("  shift")
 
         # IMPORTANT catch if we are editing any QLineEdit widgets
@@ -1734,7 +1734,7 @@ class NPEXCurator(object):
         #timer.start(50)
         if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):
             self.kpw.show()
-            self.app.exec_()
+            self.app.exec()
 
         #print('TODO: make this return something (all saved blob files? the latest blob file?)')
         #return self.blobs
