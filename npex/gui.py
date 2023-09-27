@@ -1109,7 +1109,8 @@ class NPEXCurator(object):
         else:
             #print('clicked plot 0x{:x}, event: {}'.format(id(self.kpw), event))
             if self.mouse_pos.get('topXY', None) is not None:
-                if self.view_mip is False and event.button() == 1:
+                if self.view_mip is False and event.button() == QtCore.Qt.MouseButton.LeftButton:
+                    print('adding blob')
                     pos = np.rint(np.asarray(self.mouse_pos.get('topJI', None)))
                     dims = [
                         self.view_ax['j'],
