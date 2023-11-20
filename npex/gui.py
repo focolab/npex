@@ -574,7 +574,7 @@ class NPEXCurator(object):
         self.buttonX = QtWidgets.QPushButton('face tune')
         self.buttonX.setStyleSheet(self.bstyle2)
         self.buttonX.setFixedWidth(150)
-        self.buttonX.setAttribute(QtCore.Qt.WA_TranslucentBackground, True)     # WOOO!
+        self.buttonX.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground, True)     # WOOO!
         self.buttonX.clicked.connect(self.auto_levels)
         self.proxyX.setWidget(self.buttonX)
         self.proxyX.setFocusPolicy(QtCore.Qt.NoFocus)
