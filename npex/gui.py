@@ -1109,7 +1109,8 @@ class NPEXCurator(object):
         else:
             #print('clicked plot 0x{:x}, event: {}'.format(id(self.kpw), event))
             if self.mouse_pos.get('topXY', None) is not None:
-                if self.view_mip is False and event.button() == 1:
+                if self.view_mip is False and event.button() == QtCore.Qt.MouseButton.LeftButton:
+                    print('adding blob')
                     pos = np.rint(np.asarray(self.mouse_pos.get('topJI', None)))
                     dims = [
                         self.view_ax['j'],
@@ -1645,7 +1646,7 @@ class NPEXCurator(object):
         """key press events are directed here"""
         ### uncomment this to find out a key's int code
         # print("Key %i pressed" % event.key())
-        # if event.modifiers() == QtCore.Qt.ShiftModifier:
+        # if event.modifiers() == QtCore.Qt.KeyboardModifier.ShiftModifier:
         #     print("  shift")
 
         # IMPORTANT catch if we are editing any QLineEdit widgets
