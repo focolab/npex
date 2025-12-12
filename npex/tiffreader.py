@@ -440,7 +440,7 @@ class TiffReader(object):
         self.df_index = df
 
         # build the hash: given TZC, return [file,frame] indices
-        tzc2fndx = {str(tuple(x[:3])): (x[3],x[4]) for x in self.df_index[['T', 'Z', 'C', 'F', 'ndx']].values}
+        tzc2fndx = {str(tuple([int(x) for x in x[:3]])): (x[3],x[4]) for x in self.df_index[['T', 'Z', 'C', 'F', 'ndx']].values}
 
         # some extra metadata
         self.meta_extra = dict(
