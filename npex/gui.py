@@ -615,8 +615,14 @@ class NPEXCurator(object):
         self.console.setStyleSheet("background-color: black")
         self.console.output.setStyleSheet("background-color: %s" % (greycolor))
         self.console.input.setStyleSheet("background-color: %s" % (greycolor))
-        self.console.ui.historyBtn.setStyleSheet("background-color: %s" % (greycolor))
-        self.console.ui.exceptionBtn.setStyleSheet("background-color: %s" % (greycolor))
+
+        # newer versions of pyqtgraph removed the ui attribute
+        if hasattr(self.console, 'ui'):
+            self.console.ui.historyBtn.setStyleSheet("background-color: %s" % (greycolor))
+            self.console.ui.exceptionBtn.setStyleSheet("background-color: %s" % (greycolor))
+        else:
+            self.console.historyBtn.setStyleSheet("background-color: %s" % (greycolor))
+            self.console.exceptionBtn.setStyleSheet("background-color: %s" % (greycolor))
         self.bott.addWidget(self.console)
         self.console.setMinimumWidth(340)
 
@@ -787,7 +793,7 @@ class NPEXCurator(object):
             d = data.get('blobs', [])
             self.blobs = [SegmentedBlob(**x) for x in d]
 
-        self.console.write('imported: %s \n' % (os.path.relpath(name[0])))
+        console_write(self.console, 'imported: %s \n' % (os.path.relpath(name[0])))
 
         self.view_blob_index = 0
         self.tw.setData(self.get_table())
@@ -824,7 +830,7 @@ class NPEXCurator(object):
         text+="⠀⠀⠀⠈⠻⣿⣦⣈⣧⡀⠀⠀⢸⣿⣿⠀⠀⢀⣼⡀⣨⣿⡿⠁⠀⠀⠀⠀⠀⠀\n"
         text+="⠀⠀⠀⠀⠀⠈⠻⠿⠿⠓⠄⠤⠘⠉⠙⠤⢀⠾⠿⣿⠟⠋          \n"
         text+="Pika Pika!!!\n"
-        self.console.write(text)
+        console_write(self.console, text)
 
     def get_datetime(self):
         """for timestamps"""
@@ -833,7 +839,7 @@ class NPEXCurator(object):
 
     def export_sweep(self):
         """dump png frames for a k-sweep"""
-        self.console.write('export_sweep start ...\n')
+        console_write(self.console, 'export_sweep start ...\n')
 
         timestamp = self.get_datetime()
         suffix = ''.join(random.choices(string.ascii_lowercase, k=3))
@@ -846,14 +852,14 @@ class NPEXCurator(object):
             self.update_plots()
             png = os.path.join(frame_dir, 'frame-k-%03i.png' % k)
             self.topp.grab().save(png)
-        self.console.write('export_sweep complete\n')
+        console_write(self.console, 'export_sweep complete\n')
 
     def export_screenshot(self):
         """"""
         cpdir = os.path.join(self.dest, 'checkpoints')
         os.makedirs(cpdir, exist_ok=True)
         timestamp = self.get_datetime()
-        self.console.write('screenshot (%s)\n' % timestamp)
+        console_write(self.console, 'screenshot (%s)\n' % timestamp)
         png = os.path.join(cpdir, 'plot-screenshot-%s.png' % timestamp)
         self.kpw.grab().save(png)
 
@@ -870,7 +876,7 @@ class NPEXCurator(object):
         Time stamped copies of blobs.json and blobs.csv are also written
         """
         if self.user_ID is None:
-            self.console.write('must set user ID before exporting\n' )
+            console_write(self.console, 'must set user ID before exporting\n' )
             return
 
         timestamp = self.get_datetime()
@@ -906,13 +912,13 @@ class NPEXCurator(object):
         png = os.path.join(self.dest, 'plot-gui.png')
         self.kpw.grab().save(png)
 
-        self.console.write('------------------------\n')
-        self.console.write('export timestamp: %s \n' % timestamp)
-        self.console.write('export success  : %s \n' % out)
-        self.console.write('export success  : %s \n' % csv)
-        self.console.write('export success  : %s \n' % png)
-        self.console.write('------------------------\n')
-
+        console_write(self.console, '------------------------\n')
+        console_write(self.console, 'export timestamp: %s \n' % timestamp)
+        console_write(self.console, 'export success  : %s \n' % out)
+        console_write(self.console, 'export success  : %s \n' % csv)
+        console_write(self.console, 'export success  : %s \n' % png)
+        console_write(self.console, '------------------------\n')
+    
     def cycle_blob_status(self):
         """crude right now"""
         s = [-1, 0, 1]
@@ -929,10 +935,10 @@ class NPEXCurator(object):
         #self.console.write('setting user ID\n')
         txt = self.buttonR8.text()
         if not txt.isalpha():
-            self.console.write('user ID must be letters only\n')
+            console_write(self.console, 'user ID must be letters only\n')
             self.buttonR8.setText('')
         else:
-            self.console.write('user ID set to %s\n' % txt)
+            console_write(self.console, 'user ID set to %s\n' % txt)
             self.user_ID = txt
         self.buttonR8.clearFocus()
 
@@ -947,12 +953,12 @@ class NPEXCurator(object):
                 b.status = 1
             # the text that gets displayed
             b.stash['gui_vb1_label'].setPlainText(b.ID)
-            self.console.write('update ID: %s -> %s\n' % (old_ID, txt))
+            console_write(self.console, 'update ID: %s -> %s\n' % (old_ID, txt))
             self.tw.setData(self.get_table())
             self.update_checklist()
             self.update_plots()
         else:
-            self.console.write('cannot ID provisional peak (add it first)\n')
+            console_write(self.console, 'cannot ID provisional peak (add it first)\n')
         self.buttonM3.clearFocus()
         # TODO: cannot get the cursor to stop blinking using clearFocus or anything
         #focused_widget = QtGui.QApplication.focusWidget()
@@ -962,12 +968,12 @@ class NPEXCurator(object):
     def change_slab_size(self, step):
         if step<0:
             new = max(self.view_slab_pad+step, 1)
-            self.console.write('decrease view_slab_pad -> %i \n' % new)
+            console_write(self.console, 'decrease view_slab_pad -> %i \n' % new)
             self.view_slab_pad = new
             self.update_plots()
         elif step>0:
             new = min(self.view_slab_pad+step, 10)
-            self.console.write('increase view_slab_pad -> %i \n' % new)
+            console_write(self.console, 'increase view_slab_pad -> %i \n' % new)
             self.view_slab_pad = new
             self.update_plots()
         else:
@@ -1029,7 +1035,7 @@ class NPEXCurator(object):
     def add_blob(self):
         """clickblob gets promoted!"""
         if self.view_blob_index != -1:
-            self.console.write('cannot add existing blob\n')
+            console_write(self.console, 'cannot add existing blob\n')
             return
 
         self.reindex_blobs()
@@ -1042,13 +1048,13 @@ class NPEXCurator(object):
         self.tw.setData(self.get_table())
         self.update_checklist()
         self.update_plots()
-        self.console.write('blob added\n')
+        console_write(self.console, 'blob added\n')
 
     def clear_blobs(self):
         """blobs with status -1 are dropped from the list"""
         junk = [b for b in self.blobs if b.status == -1]
         for j in junk:
-            self.console.write('adios: %s %s \n' % (str(j.index), j.ID))
+            console_write(self.console, 'adios: %s %s \n' % (str(j.index), j.ID))
             self.vb1.removeItem(j.stash['gui_vb1_label'])
             _ = j.stash.pop('gui_vb1_label', None)
         self.blobs = [b for b in self.blobs if b.status != -1]
@@ -1081,7 +1087,7 @@ class NPEXCurator(object):
         msg.append('c         : step through layers\n')
         msg.append('--------\n')
         for x in msg:
-            self.console.write(x)
+            console_write(self.console, x)
 
 
     def mouse_clicked(self, event, click_type=None):
@@ -1778,6 +1784,14 @@ def make_layers(tr=None, crop_request=None, chan_requests=None, **kwa):
         layers.append(lay)
 
     return layers
+
+def console_write(ConsoleWidget, msg):
+    # backwards compatibility for older verisons of pyqtgraph
+    
+    if hasattr(ConsoleWidget, 'repl'): # newer versions of pyqtgraph use a repl widget
+        ConsoleWidget.repl.write(msg, style='command')
+    else:
+        ConsoleWidget.write(msg)
 
 
 if __name__ == '__main__':
