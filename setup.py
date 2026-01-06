@@ -10,6 +10,7 @@ if platform.system() == 'Darwin':
         description="NeuroPAL extractor",
         long_description_content_type=open('readme.md').read(),
         packages=['npex'],
+        include_package_data=True,
         install_requires=[
             'numpy>=1.22.4',
             'tifffile>=2022.5.4', 
@@ -34,6 +35,7 @@ else:
         description="NeuroPAL extractor",
         long_description_content_type=open('readme.md').read(),
         packages=['npex'],
+        include_package_data=True,
         install_requires=[
             'numpy>=1.22.4',
             'tifffile>=2022.5.4', 
