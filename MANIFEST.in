@@ -1,3 +1,4 @@
 include *.txt
 include readme.md
 recursive-include docs *.txt
+recursive-include npex/reference_coords *.csv *.json
